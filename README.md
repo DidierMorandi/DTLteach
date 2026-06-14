@@ -45,3 +45,16 @@ To add a new chapter, add a new sidebar link and a matching section with the sam
 ## Audience
 
 This guide is designed for practical digital literacy sessions where learners may be discovering Windows for the first time. The tone and structure favor reassurance, clarity, and step-by-step learning over technical detail.
+
+## Update - 14 June 2026
+
+The repository now contains several complementary HTML learning materials.
+
+Important files:
+
+- `DTLteach.html`: main Windows 11 guide page.
+- `DTLteach_Fr.html`: separate French version of the same teaching material.
+- `programmes_presents.html`: educational inventory of programs and tools included with Windows 11.
+- `menu_Windows_11.png`: screenshot used in the Start menu section.
+
+The guide still covers Windows 11 basics, while the programs inventory adds a broader view of settings, security, administration tools, communication, accessibility, and Microsoft utilities.
