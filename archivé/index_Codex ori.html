@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Programmes natifs de Windows 11</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17202a;
+      --muted: #607083;
+      --line: #d8e0e8;
+      --paper: #f7f9fb;
+      --panel: #ffffff;
+      --accent: #0067c0;
+      --accent-2: #0f7b6c;
+      --warn: #b15d00;
+      --shadow: 0 20px 45px rgba(28, 45, 64, .12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(0, 103, 192, .16), transparent 32rem),
+        linear-gradient(135deg, #eef5fb 0%, #fbfcfe 42%, #f1f7f4 100%);
+    }
+
+    header {
+      padding: 42px clamp(20px, 5vw, 72px) 24px;
+    }
+
+    .hero {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(280px, .75fr);
+      gap: 28px;
+      align-items: end;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 840px;
+      font-size: clamp(2.25rem, 6vw, 5.4rem);
+      line-height: .95;
+      letter-spacing: 0;
+    }
+
+    .intro {
+      margin: 22px 0 0;
+      max-width: 760px;
+      font-size: clamp(1rem, 2vw, 1.22rem);
+      line-height: 1.65;
+      color: var(--muted);
+    }
+
+    .summary {
+      background: rgba(255, 255, 255, .76);
+      border: 1px solid rgba(216, 224, 232, .9);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+      backdrop-filter: blur(12px);
+    }
+
+    .summary strong {
+      display: block;
+      font-size: 2.4rem;
+      line-height: 1;
+      color: var(--accent);
+    }
+
+    .summary span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 clamp(20px, 5vw, 72px) 54px;
+    }
+
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) auto;
+      gap: 14px;
+      padding: 14px 0 20px;
+      background: linear-gradient(180deg, rgba(247, 249, 251, .96), rgba(247, 249, 251, .7));
+      backdrop-filter: blur(14px);
+    }
+
+    .search {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      min-height: 46px;
+      padding: 0 15px;
+      font: inherit;
+      color: var(--ink);
+      background: var(--panel);
+      outline: none;
+    }
+
+    .search:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0, 103, 192, .16);
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    button {
+      min-height: 46px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0 14px;
+      font: inherit;
+      color: var(--ink);
+      background: var(--panel);
+      cursor: pointer;
+    }
+
+    button.active {
+      color: #fff;
+      border-color: var(--accent);
+      background: var(--accent);
+    }
+
+    .section {
+      margin-top: 30px;
+    }
+
+    .section h2 {
+      margin: 0 0 14px;
+      font-size: 1.25rem;
+      letter-spacing: 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      min-height: 172px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      background: rgba(255, 255, 255, .86);
+      box-shadow: 0 10px 25px rgba(28, 45, 64, .07);
+    }
+
+    .card h3 {
+      margin: 0;
+      font-size: 1.06rem;
+      letter-spacing: 0;
+    }
+
+    .card p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      line-height: 1.48;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      align-items: center;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      border-radius: 999px;
+      padding: 0 9px;
+      font-size: .78rem;
+      color: #385063;
+      background: #edf3f8;
+    }
+
+    .seen {
+      color: #fff;
+      background: var(--accent-2);
+    }
+
+    .classic {
+      color: #fff;
+      background: #5c6570;
+    }
+
+    .notice {
+      margin: 28px 0 0;
+      border-left: 4px solid var(--warn);
+      padding: 10px 0 10px 14px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .empty {
+      display: none;
+      margin: 34px 0;
+      padding: 22px;
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      color: var(--muted);
+      background: rgba(255, 255, 255, .72);
+      text-align: center;
+    }
+
+    @media (max-width: 760px) {
+      .hero,
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .filters {
+        justify-content: flex-start;
+      }
+
+      button {
+        flex: 1 1 auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="hero">
+      <div>
+        <h1>Programmes natifs de Windows 11</h1>
+        <p class="intro">
+          Inventaire en français des applications et outils Microsoft fournis avec Windows 11,
+          avec une courte phrase pour situer l'utilité de chacun.
+        </p>
+      </div>
+      <aside class="summary" aria-label="Résumé de l'inventaire">
+        <strong id="count">0</strong>
+        <span>éléments répertoriés, triés par usages quotidiens, création, sécurité, accessibilité et administration.</span>
+      </aside>
+    </div>
+  </header>
+
+  <main>
+    <div class="toolbar">
+      <input class="search" id="search" type="search" placeholder="Rechercher un programme..." aria-label="Rechercher un programme">
+      <div class="filters" aria-label="Filtres par catégorie">
+        <button class="active" data-filter="all" type="button">Tout</button>
+        <button data-filter="quotidien" type="button">Quotidien</button>
+        <button data-filter="creation" type="button">Création</button>
+        <button data-filter="systeme" type="button">Système</button>
+        <button data-filter="securite" type="button">Sécurité</button>
+        <button data-filter="accessibilite" type="button">Accessibilité</button>
+      </div>
+    </div>
+
+    <div id="catalogue"></div>
+    <p class="empty" id="empty">Aucun programme ne correspond à cette recherche.</p>
+
+    <p class="notice">
+      Les mentions "détecté sur ce PC" proviennent du menu Démarrer et des composants Windows visibles dans cette session. Certaines applications
+      natives peuvent varier selon l'édition de Windows 11, les mises à jour installées et les choix de configuration.
+    </p>
+  </main>
+
+  <script>
+    const sections = [
+      {
+        title: "Usage quotidien",
+        key: "quotidien",
+        items: [
+          ["Paramètres", "Le centre de commande pour personnaliser Windows, gérer les comptes, le réseau, l'affichage et les mises à jour.", true],
+          ["Explorateur de fichiers", "L'outil principal pour parcourir, copier, classer et retrouver les fichiers du PC.", true],
+          ["Microsoft Edge", "Le navigateur Microsoft intégré pour le web, les PDF, les applications web et la synchronisation du compte."],
+          ["Microsoft Store", "La boutique officielle pour installer, mettre à jour et gérer les applications Microsoft et partenaires."],
+          ["Prise en main", "Un guide intégré qui présente les nouveautés et les gestes essentiels de Windows 11.", true],
+          ["Sauvegarde Windows", "L'application qui aide à sauvegarder les dossiers, paramètres, identifiants et préférences liés au compte Microsoft.", true],
+          ["Widgets", "Un panneau d'informations rapides pour la météo, les actualités, le calendrier et les contenus personnalisés."],
+          ["Mobile connecté", "Le pont entre le PC et le téléphone pour consulter messages, photos, appels et notifications compatibles."],
+          ["OneDrive", "Le service de synchronisation qui garde les fichiers disponibles dans le cloud et sur les appareils connectés."],
+          ["Terminal Windows", "Une console moderne qui regroupe PowerShell, Invite de commandes et autres environnements en onglets."]
+        ]
+      },
+      {
+        title: "Création et médias",
+        key: "creation",
+        items: [
+          ["Bloc-notes", "Un éditeur texte léger pour prendre des notes, modifier des fichiers simples ou nettoyer du texte."],
+          ["Paint", "Un outil de dessin simple pour annoter, recadrer et créer rapidement des images."],
+          ["Photos", "La galerie Microsoft pour consulter, organiser, retoucher légèrement et importer des images."],
+          ["Outil Capture d'écran", "Un outil rapide pour capturer une zone, une fenêtre, l'écran entier ou enregistrer une vidéo courte."],
+          ["Lecteur multimédia", "Le lecteur intégré pour écouter de la musique et regarder les vidéos locales."],
+          ["Enregistreur vocal", "Une application minimaliste pour enregistrer des mémos audio et les relire facilement."],
+          ["Caméra", "L'application qui contrôle la webcam pour prendre des photos, filmer ou vérifier l'image de la caméra."],
+          ["Clipchamp", "L'éditeur vidéo Microsoft destiné au montage simple, aux modèles et aux exports rapides."],
+          ["Calculatrice", "Une calculatrice complète avec modes standard, scientifique, graphique, programmeur et conversions."],
+          ["Horloge", "Un espace pour alarmes, minuteurs, chronomètre, horloge mondiale et sessions de concentration."]
+        ]
+      },
+      {
+        title: "Communication et organisation",
+        key: "quotidien",
+        items: [
+          ["Outlook pour Windows", "Le client moderne de messagerie et calendrier qui remplace progressivement Courrier et Calendrier."],
+          ["Courrier", "L'ancien client de messagerie intégré, encore présent sur certaines installations Windows 11."],
+          ["Calendrier", "L'ancien agenda intégré pour consulter et organiser les rendez-vous synchronisés."],
+          ["Contacts", "Le carnet d'adresses utilisé par les applications Microsoft pour centraliser les personnes."],
+          ["Microsoft Teams", "L'application de conversation, réunion et appel fournie sur de nombreuses installations Windows 11."],
+          ["Assistance rapide", "Un outil d'entraide à distance pour partager l'écran ou prendre la main avec autorisation."],
+          ["Météo", "Une application Microsoft pour consulter les prévisions, alertes et cartes météo locales."],
+          ["Cartes", "L'application de cartographie Windows, présente sur certaines configurations et selon les mises à jour."]
+        ]
+      },
+      {
+        title: "Sécurité et maintenance",
+        key: "securite",
+        items: [
+          ["Sécurité Windows", "Le tableau de bord de protection du PC: antivirus, pare-feu, compte, appareil et contrôle des applications."],
+          ["Pare-feu Windows Defender", "L'outil qui contrôle les connexions réseau entrantes et sortantes selon les règles de sécurité."],
+          ["Windows Update", "Le service de mise à jour pour recevoir correctifs, pilotes, versions de Windows et options facultatives."],
+          ["Historique des fichiers", "Une fonction de sauvegarde qui peut conserver plusieurs versions de fichiers personnels."],
+          ["Récupération", "Les options permettant de réinitialiser le PC, revenir à une version précédente ou démarrer en mode avancé."],
+          ["Nettoyage de disque", "Un outil classique pour supprimer fichiers temporaires, caches et éléments système devenus inutiles."],
+          ["Défragmenteur et optimiser les lecteurs", "L'utilitaire qui optimise les disques durs et SSD selon le type de stockage."],
+          ["Informations système", "Un rapport détaillé sur le matériel, les composants, l'environnement logiciel et la configuration."],
+          ["Observateur d'événements", "Le journal technique où Windows consigne erreurs, avertissements, connexions et activités système."]
+        ]
+      },
+      {
+        title: "Outils système et administration",
+        key: "systeme",
+        items: [
+          ["Gestionnaire des tâches", "Le moniteur pour voir les applications, performances, processus, démarrages et services actifs."],
+          ["Panneau de configuration", "L'ancien centre de réglages qui reste utile pour de nombreux paramètres avancés."],
+          ["Outils Windows", "Un dossier regroupant des utilitaires d'administration, de diagnostic et de maintenance."],
+          ["Gestion de l'ordinateur", "Une console qui rassemble services, disques, utilisateurs locaux, journaux et périphériques."],
+          ["Gestionnaire de périphériques", "L'outil pour inspecter le matériel, les pilotes, les erreurs de périphériques et les mises à jour."],
+          ["Gestion des disques", "L'interface pour créer, formater, réduire, étendre ou attribuer des lettres aux partitions."],
+          ["Services", "La console qui permet de consulter, démarrer, arrêter et configurer les services Windows."],
+          ["Configuration du système", "Un utilitaire de diagnostic pour ajuster le démarrage et isoler certains services."],
+          ["Éditeur du Registre", "L'éditeur avancé de la base de configuration interne de Windows."],
+          ["Invite de commandes", "La console historique pour lancer des commandes Windows et scripts batch."],
+          ["Windows PowerShell", "L'environnement de script et d'administration pour automatiser Windows avec des commandes puissantes."],
+          ["Planificateur de tâches", "L'outil qui lance automatiquement programmes et scripts selon une heure ou un événement."],
+          ["Moniteur de ressources", "Une vue détaillée de l'utilisation du processeur, de la mémoire, du disque et du réseau."],
+          ["Analyseur de performances", "Un outil avancé pour enregistrer et étudier les compteurs de performance du système."],
+          ["Connexion Bureau à distance", "Le client Microsoft pour se connecter à un autre PC Windows compatible à distance."]
+        ]
+      },
+      {
+        title: "Accessibilité",
+        key: "accessibilite",
+        items: [
+          ["Loupe", "Un outil de zoom qui agrandit tout ou partie de l'écran pour améliorer la lisibilité."],
+          ["Narrateur", "Le lecteur d'écran intégré qui lit les éléments affichés et aide à naviguer sans vision complète."],
+          ["Clavier visuel", "Un clavier affiché à l'écran pour saisir du texte avec la souris, le tactile ou un dispositif adapté."],
+          ["Saisie vocale", "La dictée intégrée de Windows pour écrire du texte à la voix dans les champs compatibles."],
+          ["Accès vocal", "Une commande vocale de Windows 11 permettant de contrôler le PC et de dicter du texte."],
+          ["Sous-titres en direct", "Une fonction qui génère des sous-titres locaux pour certains contenus audio compatibles."],
+          ["Reconnaissance vocale Windows", "L'ancien système de commande vocale, encore disponible sur certaines configurations."],
+          ["Actions par clic", "Une fonction récente qui propose des actions contextuelles à partir de contenus visibles à l'écran.", true]
+        ]
+      }
+    ];
+
+    const catalogue = document.querySelector("#catalogue");
+    const search = document.querySelector("#search");
+    const buttons = [...document.querySelectorAll("[data-filter]")];
+    const count = document.querySelector("#count");
+    const empty = document.querySelector("#empty");
+    let currentFilter = "all";
+
+    function cardTemplate(item, categoryKey) {
+      const [name, description, detected] = item;
+      const tags = [
+        detected ? '<span class="tag seen">détecté sur ce PC</span>' : '<span class="tag">Windows 11</span>',
+        categoryKey === "systeme" || categoryKey === "securite" ? '<span class="tag classic">outil avancé</span>' : ""
+      ].join("");
+      return `
+        <article class="card" data-category="${categoryKey}" data-search="${`${name} ${description}`.toLowerCase()}">
+          <div>
+            <h3>${name}</h3>
+            <p>${description}</p>
+          </div>
+          <div class="meta">${tags}</div>
+        </article>
+      `;
+    }
+
+    function render() {
+      catalogue.innerHTML = sections.map(section => `
+        <section class="section" data-section="${section.key}">
+          <h2>${section.title}</h2>
+          <div class="grid">
+            ${section.items.map(item => cardTemplate(item, section.key)).join("")}
+          </div>
+        </section>
+      `).join("");
+      count.textContent = document.querySelectorAll(".card").length;
+      applyFilters();
+    }
+
+    function applyFilters() {
+      const query = search.value.trim().toLowerCase();
+      let visibleCards = 0;
+
+      document.querySelectorAll(".card").forEach(card => {
+        const matchesFilter = currentFilter === "all" || card.dataset.category === currentFilter;
+        const matchesSearch = !query || card.dataset.search.includes(query);
+        const visible = matchesFilter && matchesSearch;
+        card.hidden = !visible;
+        if (visible) visibleCards += 1;
+      });
+
+      document.querySelectorAll(".section").forEach(section => {
+        const hasVisibleCard = [...section.querySelectorAll(".card")].some(card => !card.hidden);
+        section.hidden = !hasVisibleCard;
+      });
+
+      empty.style.display = visibleCards ? "none" : "block";
+      count.textContent = visibleCards;
+    }
+
+    buttons.forEach(button => {
+      button.addEventListener("click", () => {
+        buttons.forEach(item => item.classList.remove("active"));
+        button.classList.add("active");
+        currentFilter = button.dataset.filter;
+        applyFilters();
+      });
+    });
+
+    search.addEventListener("input", applyFilters);
+    render();
+  </script>
+</body>
+</html>

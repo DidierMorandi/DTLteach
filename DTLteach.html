@@ -2,145 +2,129 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DTLteach - Mon ordinateur expliqué simplement</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DTLteach &mdash; DTL Projects</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:#f5f7fb;color:#24324a;line-height:1.7}
-.sidebar{position:fixed;left:0;top:0;bottom:0;width:300px;background:#fff;border-right:1px solid #d9e2ef;overflow:auto}
-.sidebar h2{padding:20px;color:#1f5fbf}
-.sidebar a{display:block;padding:10px 20px;text-decoration:none;color:#234}
-.sidebar a:hover{background:#eef4ff}
-.main{margin-left:300px}
-header{background:linear-gradient(135deg,#e07b39,#c45f1e);color:white;padding:30px}
-.section{max-width:1200px;margin:20px auto;background:white;border:1px solid #d9e2ef;border-radius:14px;padding:24px}
-.badge{display:inline-block;width:38px;height:38px;border-radius:50%;background:#1f5fbf;color:#fff;text-align:center;line-height:38px;font-weight:bold;margin-right:10px}
-.info{background:#fff8e8;border-left:5px solid #efc36a;padding:14px}
-.tip{background:#eef8ef;border-left:5px solid #5bb56e;padding:14px}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
-.card{border:1px solid #d9e2ef;border-radius:10px;padding:14px}
-.path{background:#f3f3f3;padding:10px;border-radius:8px;font-family:Consolas,monospace}
-img{max-width:100%;border:1px solid #ccc;border-radius:12px}
-h2{color:#1f5fbf}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:#0b0d0f; --surface:#131619; --surface2:#1a1e23; --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.12);
+    --text:#e8eaed; --muted:#7a8290; --net:#38bdf8; --inst:#4e9eff; --diag:#ff7a45; --inv:#4ade80; --git:#1a6bbf; --gittext:#00ff00;
+    --accent:var(--inv);
+  }
+  html { scroll-behavior:smooth; }
+  body { background:var(--bg); color:var(--text); font-family:'JetBrains Mono',monospace; font-size:14px; line-height:1.7; min-height:100vh; }
+  .grid-bg { position:fixed; inset:0; background-image:linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px); background-size:40px 40px; pointer-events:none; z-index:0; }
+  .lang-switcher { position:fixed; top:14px; right:24px; z-index:3; display:flex; gap:6px; align-items:center; font-size:11px; letter-spacing:.1em; }
+  .lang-switcher a { color:var(--muted); text-decoration:none; padding:3px 8px; border:.5px solid var(--border2); background:rgba(0,0,0,.4); }
+  .lang-switcher a.active, .lang-switcher a:hover { color:var(--text); border-color:rgba(255,255,255,.22); }
+  .breadcrumb, header, main, footer { position:relative; z-index:1; max-width:1100px; margin:0 auto; }
+  .breadcrumb { padding:20px 48px 0; font-size:11px; color:var(--muted); letter-spacing:.08em; }
+  .breadcrumb a { color:var(--muted); text-decoration:none; }
+  .breadcrumb a:hover { color:var(--text); }
+  header { padding:72px 48px 56px; border-bottom:.5px solid var(--border2); text-align:center; }
+  .header-tag { font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); margin-bottom:22px; }
+  h1 { font-family:'Syne',sans-serif; font-size:clamp(42px,6vw,72px); font-weight:800; line-height:1; color:var(--accent); margin-bottom:18px; }
+  .header-desc { max-width:760px; margin:0 auto 26px; color:var(--muted); font-style:italic; }
+  .meta-row { display:flex; justify-content:center; flex-wrap:wrap; gap:24px; font-size:11px; color:var(--muted); letter-spacing:.08em; }
+  .meta-row span::before { content:'// '; opacity:.5; }
+  main { padding:56px 48px; display:grid; gap:32px; }
+  .project-card { display:grid; grid-template-columns:3px 1fr; background:var(--surface); border:.5px solid var(--border2); border-radius:2px; overflow:hidden; }
+  .card-accent { background:var(--accent); }
+  .card-inner { display:grid; grid-template-columns:1fr 320px; }
+  .card-body { position:relative; padding:36px 40px; border-right:.5px solid var(--border); }
+  .card-sidebar { padding:36px 32px; background:var(--surface2); display:flex; flex-direction:column; gap:26px; }
+  .card-class-label { position:absolute; bottom:30px; left:36px; font:800 80px/1 'Syne',sans-serif; opacity:.03; pointer-events:none; }
+  h2 { font-family:'Syne',sans-serif; font-size:30px; color:var(--accent); margin-bottom:8px; }
+  .project-tagline { color:var(--muted); font-style:italic; margin-bottom:28px; }
+  .section-label { font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); opacity:.75; margin-bottom:12px; }
+  .summary { color:var(--muted); margin-bottom:28px; max-width:720px; }
+  .feature-list, .req-list { list-style:none; display:flex; flex-direction:column; gap:8px; }
+  .feature-list { margin-bottom:28px; }
+  .feature-list li { position:relative; padding-left:16px; font-size:13px; }
+  .feature-list li::before { content:''; position:absolute; left:0; top:10px; width:5px; height:1px; background:var(--accent); opacity:.75; }
+  .tags { display:flex; flex-wrap:wrap; gap:6px; }
+  .tag, .doc-link, .muted-note { font-size:10px; letter-spacing:.08em; border:.5px solid var(--border2); padding:5px 10px; background:rgba(0,0,0,.25); color:var(--muted); text-decoration:none; }
+  .doc-link { color:var(--accent); border-color:color-mix(in srgb, var(--accent) 35%, transparent); }
+  .doc-link:hover { background:rgba(255,255,255,.06); }
+  .sidebar-item { display:flex; justify-content:space-between; gap:18px; padding-bottom:8px; border-bottom:.5px solid var(--border); font-size:12px; }
+  .sidebar-item .key { color:var(--muted); }
+  .sidebar-item .val { color:var(--text); font-size:11px; text-align:right; }
+  .req-list li { color:var(--muted); font-size:12px; padding:6px 10px; border:.5px solid var(--border); background:rgba(0,0,0,.25); }
+  .doc-list { display:flex; flex-wrap:wrap; gap:8px; }
+  footer { padding:32px 48px 64px; border-top:.5px solid var(--border2); display:flex; justify-content:space-between; color:var(--muted); font-size:11px; letter-spacing:.08em; }
+  @media (max-width:768px) { .breadcrumb, header, main, footer { padding-left:20px; padding-right:20px; } .card-inner { grid-template-columns:1fr; } .card-body { border-right:none; border-bottom:.5px solid var(--border); } footer { flex-direction:column; gap:8px; } }
 </style>
 </head>
 <body>
-<div class="sidebar">
-<h2>📖 DTLteach - Manuel Windows 11</h2>
-<a href="#intro">Bienvenue</a>
-<a href="#demarrer">Menu Démarrer</a>
-<a href="#icones">6 icônes de gauche</a>
-<a href="#affichage">Agrandir l'affichage</a>
-<a href="#bureau">Le Bureau</a>
-<a href="#fenetres">Les fenêtres</a>
-<a href="#explorateur">Explorateur</a>
-<a href="#internet">Internet</a>
-<a href="#email">E-mails</a>
-<a href="#usb">Clé USB</a>
-<a href="#wifi">Wi‑Fi</a>
-<a href="#programmes">Programmes</a>
-<a href="#securite">Sécurité</a>
+<div class="lang-switcher">
+  <a href="DTLteach_En.html">En</a><span>|</span><a class="active" href="#">Fr</a>
 </div>
-
-<div class="main">
+<div class="grid-bg"></div>
+<div class="breadcrumb"><a href="index.html">Accueil</a><span style="margin:0 8px;opacity:.4;">/</span><span style="color:var(--accent);">DTLteach</span></div>
 <header>
-<h1>🖥️ DTLteach - Mon ordinateur expliqué simplement</h1>
-<p>Guide pratique pour débutants et grands-parents</p>
+  <p class="header-tag">DTL Software &mdash; Juin 2026</p>
+  <h1>DTLteach</h1>
+  <p class="header-desc">Guide pédagogique Windows 11 pour débutants</p>
+  <div class="meta-row"><span>Didier DTL Morandi</span><span>didier.morandi@gmail.com</span><span>MIT License</span></div>
 </header>
-
-<section class="section" id="intro">
-<h2><span class="badge">1</span>Bienvenue</h2>
-<p>Ce guide explique Windows 11 avec des mots simples. Prenez votre temps et avancez chapitre par chapitre.</p>
-</section>
-
-<section class="section" id="demarrer">
-<h2><span class="badge">2</span>Le menu Démarrer</h2>
-<div class="info">
-La barre des tâches est située en bas de l'écran. Les icônes sont centrées par défaut. Le bouton Démarrer est la première icône à gauche du groupe d'icônes centré.
-</div>
-<p><img src="menu_Windows_11.png" alt="Menu Windows 11"></p>
-<div class="tip">
-Le menu Démarrer permet d'accéder aux programmes, aux documents, aux paramètres et à l'arrêt de l'ordinateur.
-</div>
-</section>
-
-<section class="section" id="icones">
-<h2><span class="badge">3</span>Les six icônes de la colonne de gauche</h2>
-<p><strong>Sur l'image, la colonne verticale de gauche contient six raccourcis très utiles. De haut en bas, vous trouverez :</strong></p>
-<div class="cards">
-<div class="card">☰ <b>Menu</b><br>Affiche ou masque les noms des raccourcis.</div>
-<div class="card">👤 <b>Compte utilisateur</b><br>Accès à votre profil.</div>
-<div class="card">📄 <b>Documents</b><br>Vos lettres et fichiers personnels.</div>
-<div class="card">🖼️ <b>Images</b><br>Vos photographies.</div>
-<div class="card">⚙️ <b>Paramètres</b><br>Réglages de Windows.</div>
-<div class="card">⏻ <b>Marche / Arrêt</b><br>Mettre en veille, redémarrer ou arrêter.</div>
-</div>
-</section>
-
-<section class="section" id="affichage">
-<h2><span class="badge">4</span>Agrandir l'affichage</h2>
-<h3>Agrandir uniquement le texte</h3>
-<div class="path">Démarrer → Paramètres → Accessibilité → Taille du texte</div>
-<h3>Agrandir tout l'écran</h3>
-<div class="path">Démarrer → Paramètres → Système → Affichage → Mise à l'échelle</div>
-<div class="tip">Essayez 150 % pour un confort de lecture optimal.</div>
-</section>
-
-<section class="section" id="bureau">
-<h2><span class="badge">5</span>Le Bureau Windows</h2>
-<div class="cards">
-<div class="card">🗑️ Corbeille</div>
-<div class="card">📁 Dossiers</div>
-<div class="card">📌 Barre des tâches</div>
-<div class="card">🕒 Horloge</div>
-</div>
-</section>
-
-<section class="section" id="fenetres">
-<h2><span class="badge">6</span>Les fenêtres</h2>
-<ul><li>_ Réduire</li><li>□ Agrandir</li><li>X Fermer</li></ul>
-</section>
-
-<section class="section" id="explorateur">
-<h2><span class="badge">7</span>L'Explorateur de fichiers</h2>
-<p>Vous y trouverez Documents, Images, Musique, Vidéos et Téléchargements.</p>
-</section>
-
-<section class="section" id="internet">
-<h2><span class="badge">8</span>Internet</h2>
-<ol><li>Ouvrir Google Chrome (après l'avoir installé)</li><li>Taper une recherche</li><li>Appuyer sur Entrée</li></ol>
-</section>
-
-<section class="section" id="email">
-<h2><span class="badge">9</span>Les e-mails</h2>
-<p>Un e-mail est une lettre envoyée par Internet.</p>
-</section>
-
-<section class="section" id="usb">
-<h2><span class="badge">10</span>Utiliser une clé USB</h2>
-<p>Branchez la clé puis ouvrez l'Explorateur de fichiers.</p>
-</section>
-
-<section class="section" id="wifi">
-<h2><span class="badge">11</span>Connexion Wi‑Fi</h2>
-<p>Cliquez sur l'icône réseau puis choisissez votre box Internet.</p>
-</section>
-
-<section class="section" id="programmes">
-<h2><span class="badge">12</span>Programmes essentiels</h2>
-<div class="cards">
-<div class="card">🌐 Google Chrome</div>
-<div class="card">📷 Photos</div>
-<div class="card">🎨 Paint</div>
-<div class="card">🔢 Calculatrice</div>
-<div class="card">📅 Calendrier</div>
-<div class="card">🛡️ Sécurité Windows</div>
-</div>
-</section>
-
-<section class="section" id="securite">
-<h2><span class="badge">13</span>Les règles d'or</h2>
-<div class="tip">✔ Faire les mises à jour<br>✔ Utiliser un mot de passe<br>✔ Se méfier des arnaques<br>✔ Demander de l'aide en cas de doute</div>
-</section>
-</div>
+<main>
+  <div class="project-card">
+    <div class="card-accent"></div>
+    <div class="card-inner">
+      <div class="card-body">
+        <div class="card-class-label">DTL</div>
+        <p class="section-label">Présentation</p>
+        <h2>DTLteach</h2>
+        <p class="project-tagline">Guide pédagogique Windows 11 pour débutants</p>
+        <p class="summary">DTLteach est une page HTML autonome, rédigée en français, pour accompagner les débutants, les seniors et les personnes qui souhaitent une introduction calme aux usages quotidiens de Windows 11.</p>
+        <p class="section-label">Fonctionnalités</p>
+        <ul class="feature-list">
+          <li>Explication du menu Démarrer Windows 11</li>
+          <li>Raccourcis utiles, bureau, fenêtres et Explorateur de fichiers</li>
+          <li>Bases de Chrome, email, clé USB, Wi-Fi et programmes essentiels</li>
+          <li>Conseils de sécurité simples</li>
+          <li>Navigation fixe par chapitres</li>
+          <li>Aucune installation, aucun serveur, aucune dépendance externe</li>
+        </ul>
+        <p class="section-label">Stack</p>
+        <div class="tags">
+          <span class="tag">HTML</span>
+          <span class="tag">CSS</span>
+          <span class="tag">Static page</span>
+          <span class="tag">Windows 11</span>
+        </div>
+      </div>
+      <div class="card-sidebar">
+        <div>
+          <p class="section-label">Informations</p>
+          <div class="sidebar-item"><span class="key">Version</span><span class="val">1.0</span></div>
+          <div class="sidebar-item"><span class="key">Licence</span><span class="val">MIT</span></div>
+          <div class="sidebar-item"><span class="key">Type</span><span class="val">Outil DTL</span></div>
+        </div>
+        <div>
+          <p class="section-label">Prérequis</p>
+          <ul class="req-list">
+            <li>Navigateur web</li>
+            <li>Fichier DTLteach.html</li>
+            <li>Image menu_Windows_11.png</li>
+          </ul>
+        </div>
+        <div>
+          <p class="section-label">Documentation</p>
+          <div class="doc-list">
+          <a class="doc-link" href="DTLteach_Guide.html" target="_blank" rel="noopener">Guide pédagogique</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<footer>
+  <span>&copy; 2026 Didier DTL Morandi &mdash; MIT License</span>
+  <span>www.netdtl.com</span>
+</footer>
 </body>
 </html>

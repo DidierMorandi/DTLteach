@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Applications installées sur ce PC</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #18212c;
+      --muted: #5d6f7c;
+      --line: #d7e0e5;
+      --paper: #f6f9fb;
+      --panel: #ffffff;
+      --accent: #0067c0;
+      --green: #177267;
+      --violet: #6852a3;
+      --orange: #9b5a12;
+      --shadow: 0 18px 42px rgba(31, 47, 63, .11);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(0, 103, 192, .14), transparent 34rem),
+        radial-gradient(circle at 80% 0%, rgba(23, 114, 103, .11), transparent 30rem),
+        linear-gradient(135deg, #f3f7fb 0%, #fbfcfe 48%, #f5f8f1 100%);
+    }
+    header { padding: 42px clamp(20px, 5vw, 72px) 22px; }
+    .hero {
+      max-width: 1220px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(270px, .8fr);
+      gap: 28px;
+      align-items: end;
+    }
+    h1 {
+      margin: 0;
+      max-width: 860px;
+      font-size: clamp(2.25rem, 6vw, 5.15rem);
+      line-height: .96;
+      letter-spacing: 0;
+    }
+    .intro {
+      margin: 20px 0 0;
+      max-width: 790px;
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      line-height: 1.62;
+      color: var(--muted);
+    }
+    .summary {
+      display: grid;
+      gap: 18px;
+      background: rgba(255, 255, 255, .78);
+      border: 1px solid rgba(215, 224, 229, .95);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+      backdrop-filter: blur(12px);
+    }
+    .metric strong { display: block; font-size: 2.4rem; line-height: 1; color: var(--accent); }
+    .metric span { display: block; margin-top: 7px; color: var(--muted); line-height: 1.42; }
+    .navlinks { display: flex; flex-wrap: wrap; gap: 8px; }
+    .navlinks a {
+      min-height: 38px;
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0 12px;
+      color: var(--ink);
+      background: #fff;
+      text-decoration: none;
+    }
+    main { max-width: 1220px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 72px) 54px; }
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) auto;
+      gap: 14px;
+      padding: 14px 0 18px;
+      background: linear-gradient(180deg, rgba(246, 249, 251, .97), rgba(246, 249, 251, .72));
+      backdrop-filter: blur(14px);
+    }
+    .search {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      min-height: 46px;
+      padding: 0 15px;
+      font: inherit;
+      color: var(--ink);
+      background: var(--panel);
+      outline: none;
+    }
+    .search:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0, 103, 192, .16); }
+    .filters { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+    button {
+      min-height: 46px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0 13px;
+      font: inherit;
+      color: var(--ink);
+      background: var(--panel);
+      cursor: pointer;
+    }
+    button.active { color: #fff; border-color: var(--accent); background: var(--accent); }
+    .section { margin-top: 30px; }
+    .section h2 { margin: 0 0 14px; font-size: 1.22rem; letter-spacing: 0; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(265px, 1fr)); gap: 14px; }
+    .card {
+      min-height: 198px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      background: rgba(255, 255, 255, .88);
+      box-shadow: 0 10px 25px rgba(31, 47, 63, .07);
+    }
+    .card h3 { margin: 0; font-size: 1.04rem; line-height: 1.28; letter-spacing: 0; }
+    .card p { margin: 9px 0 0; color: var(--muted); line-height: 1.48; }
+    .details { margin-top: 12px; display: grid; gap: 5px; color: #425363; font-size: .88rem; line-height: 1.35; }
+    .meta { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; }
+    .tag { display: inline-flex; align-items: center; min-height: 26px; border-radius: 999px; padding: 0 9px; font-size: .78rem; color: #385063; background: #edf3f8; }
+    .tag.software { color: #fff; background: var(--green); }
+    .tag.system { color: #fff; background: #5c6570; }
+    .tag.media { color: #fff; background: var(--violet); }
+    .tag.driver { color: #fff; background: var(--orange); }
+    .empty { display: none; margin: 34px 0; padding: 22px; border: 1px dashed var(--line); border-radius: 8px; color: var(--muted); background: rgba(255,255,255,.72); text-align: center; }
+    .notice { margin: 28px 0 0; border-left: 4px solid var(--orange); padding: 10px 0 10px 14px; color: var(--muted); line-height: 1.55; }
+    @media (max-width: 800px) {
+      .hero, .toolbar { grid-template-columns: 1fr; }
+      .filters { justify-content: flex-start; }
+      button { flex: 1 1 auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="hero">
+      <div>
+        <h1>Applications installées sur ce PC</h1>
+        <p class="intro">Inventaire local des logiciels, composants, pilotes et applications détectés dans Windows.</p>
+      </div>
+      <aside class="summary" aria-label="Résumé de l'inventaire">
+        <div class="metric"><strong id="count">0</strong><span>entrées visibles dans l'inventaire filtré.</span></div>
+        <div class="metric"><strong id="totalSize">0 Go</strong><span>taille estimée cumulée quand Windows la renseigne.</span></div>
+        <nav class="navlinks" aria-label="Navigation"><a href="programmes_presents.html">Programmes natifs Windows 11</a></nav>
+      </aside>
+    </div>
+  </header>
+  <main>
+    <div class="toolbar">
+      <input class="search" id="search" type="search" placeholder="Rechercher une application, un éditeur, une version..." aria-label="Rechercher une application">
+      <div class="filters" aria-label="Filtres par catégorie">
+        <button class="active" data-filter="all" type="button">Tout</button>
+        <button data-filter="logiciel" type="button">Logiciels</button>
+        <button data-filter="media" type="button">Médias</button>
+        <button data-filter="dev" type="button">Dev</button>
+        <button data-filter="systeme" type="button">Système</button>
+        <button data-filter="pilote" type="button">Pilotes</button>
+      </div>
+    </div>
+    <div id="catalogue"></div>
+    <p class="empty" id="empty">Aucune application ne correspond à cette recherche.</p>
+    <p class="notice">Inventaire généré le 31/05/2026 09:43 depuis les entrées d'installation Windows et les raccourcis d'applications visibles dans cette session. Les tailles sont celles déclarées par les installateurs, donc parfois absentes ou approximatives.</p>
+  </main>
+  <script id="app-data" type="application/json">[{"name":"4K Video Downloader+","version":"26.0.8.295","publisher":"InterPromo GMBH","installDate":null,"sizeKb":859869,"source":"Applications installées"},{"name":"7-Zip 24.08 (x64 edition)","version":"24.08.00.0","publisher":"Igor Pavlov","installDate":"20241012","sizeKb":5883,"source":"Applications installées"},{"name":"Actions par clic","version":null,"publisher":"Microsoft / Windows","installDate":null,"sizeKb":null,"source":"Menu Démarrer"},{"name":"Adobe Acrobat (64-bit)","version":"26.001.21563","publisher":"Adobe","installDate":"20260516","sizeKb":2663423,"source":"Applications installées"},{"name":"Adobe Refresh Manager","version":"1.8.0","publisher":"Adobe Systems Incorporated","installDate":"20260216","sizeKb":2104,"source":"Applications installées"},{"name":"Avast Update Helper","version":"1.8.1579.3","publisher":"AVAST Software","installDate":"20221213","sizeKb":33,"source":"Applications installées"},{"name":"AVS Audio Converter 10.3.2","version":"10.3.2.634","publisher":"Online Media Technologies Ltd.","installDate":"20230108","sizeKb":16066,"source":"Applications installées"},{"name":"AVS Audio Editor 10.3.2","version":"10.3.2.567","publisher":"Online Media Technologies Ltd.","installDate":"20230108","sizeKb":21440,"source":"Applications installées"},{"name":"AVS Disc Creator 6.2.4","version":"6.2.4.564","publisher":"Online Media Technologies Ltd.","installDate":"20230108","sizeKb":12260,"source":"Applications installées"},{"name":"AVS Document Converter 4.2.6","version":"4.2.6.271","publisher":"Online Media Technologies Ltd.","installDate":"20230108","sizeKb":13772,"source":"Applications installées"},{"name":"AVS Image Converter 5.5.3","version":"5.5.3.322","publisher":"Online Media Technologies Ltd.","installDate":"20230108","sizeKb":19822,"source":"Applications installées"},{"name":"AVS Media Player 5.5.3","version":"5.5.3.152","publisher":"Online Media Technologies Ltd.","installDate":"20230108","sizeKb":9122,"source":"Applications installées"},{"name":"AVS Photo Editor 3.2.6","version":"3.2.6.170","publisher":"Online Media Technologies Ltd.","installDate":"20230108","sizeKb":7926,"source":"Applications installées"},{"name":"AVS Registry Cleaner 4.1.7","version":"4.1.7.293","publisher":"Online Media Technologies Ltd.","installDate":"20230108","sizeKb":10805,"source":"Applications installées"},{"name":"AVS Video Converter 12.5.1","version":"12.5.1.698","publisher":"Online Media Technologies Ltd.","installDate":"20230108","sizeKb":77893,"source":"Applications installées"},{"name":"AVS Video ReMaker 8.0.2","version":"8.0.2.21","publisher":"Ascensio System SIA","installDate":"20250714","sizeKb":130184,"source":"Applications installées"},{"name":"Contrôle d’intégrité du PC Windows","version":"3.6.2204.08001","publisher":"Microsoft Corporation","installDate":"20220422","sizeKb":11939,"source":"Applications installées"},{"name":"Copilot","version":"148.0.3967.70","publisher":"Microsoft Corporation","installDate":"20260519","sizeKb":null,"source":"Applications installées"},{"name":"D3DX10","version":"15.4.2368.0902","publisher":"Microsoft","installDate":"20210203","sizeKb":2232,"source":"Applications installées"},{"name":"Désinstallation de l\u0027imprimante EPSON Universal Print Driver","version":null,"publisher":"SEIKO EPSON Corporation","installDate":null,"sizeKb":null,"source":"Applications installées"},{"name":"Epson Event Manager","version":"3.11.74","publisher":"Seiko Epson Corporation","installDate":"20241125","sizeKb":51118,"source":"Applications installées"},{"name":"EPSON Scan OCR Component","version":"3.00.06","publisher":"Seiko Epson Corporation","installDate":"20241125","sizeKb":96565,"source":"Applications installées"},{"name":"Epson Software Updater","version":"4.6.7","publisher":"Seiko Epson Corporation","installDate":"20241125","sizeKb":9353,"source":"Applications installées"},{"name":"Everything 1.4.1.1030 (x64)","version":"1.4.1.1030","publisher":"voidtools","installDate":null,"sizeKb":3072,"source":"Applications installées"},{"name":"FileZilla 3.69.6","version":"3.69.6","publisher":"Tim Kosse","installDate":null,"sizeKb":45148,"source":"Applications installées"},{"name":"Galerie de photos","version":"16.4.3528.0331","publisher":"Microsoft Corporation","installDate":"20210203","sizeKb":3996,"source":"Applications installées"},{"name":"GIMP 3.0.2-1","version":"3.0.2.1","publisher":"The GIMP Team","installDate":"20250405","sizeKb":978416,"source":"Applications installées"},{"name":"Git","version":"2.54.0","publisher":"The Git Development Community","installDate":"20260520","sizeKb":343748,"source":"Applications installées"},{"name":"Google Chrome","version":"148.0.7778.216","publisher":"Google LLC","installDate":"20241031","sizeKb":123121,"source":"Applications installées"},{"name":"Grand Theft Auto V","version":null,"publisher":"Rockstar North","installDate":null,"sizeKb":null,"source":"Applications installées"},{"name":"Icaros","version":"3.3.3.0","publisher":"Tabibito Technology","installDate":"20250717","sizeKb":36770,"source":"Applications installées"},{"name":"iCloud Outlook","version":"15.3.0.138","publisher":"Apple Inc.","installDate":"20250107","sizeKb":3957,"source":"Applications installées"},{"name":"ImageMagick 7.1.0-62 Q16 (64-bit) (2023-02-12)","version":"7.1.0.62","publisher":"ImageMagick Studio LLC","installDate":"20230228","sizeKb":118790,"source":"Applications installées"},{"name":"IndexLinker version 2024.02.14","version":"2024.01.08","publisher":null,"installDate":"20250418","sizeKb":908,"source":"Applications installées"},{"name":"Inno Setup version 6.7.2","version":"6.7.2","publisher":"jrsoftware.org","installDate":"20260523","sizeKb":33274,"source":"Applications installées"},{"name":"Logi Options+","version":"2.3.879545","publisher":"Logitech","installDate":null,"sizeKb":null,"source":"Applications installées"},{"name":"Logi Plugin Service","version":"6.3.0.2406","publisher":"Logitech","installDate":"20260430","sizeKb":281218,"source":"Applications installées"},{"name":"Logitech Capture","version":"2.06.12","publisher":"Logitech","installDate":null,"sizeKb":null,"source":"Applications installées"},{"name":"Microsoft .NET Host - 8.0.27 (x64)","version":"64.108.52182","publisher":"Microsoft Corporation","installDate":"20260512","sizeKb":508,"source":"Applications installées"},{"name":"Microsoft .NET Host FX Resolver - 8.0.27 (x64)","version":"64.108.52182","publisher":"Microsoft Corporation","installDate":"20260512","sizeKb":340,"source":"Applications installées"},{"name":"Microsoft .NET Runtime - 8.0.27 (x64)","version":"64.108.52182","publisher":"Microsoft Corporation","installDate":"20260512","sizeKb":71884,"source":"Applications installées"},{"name":"Microsoft Application Error Reporting","version":"12.0.6015.5000","publisher":"Microsoft Corporation","installDate":"20210203","sizeKb":4816,"source":"Applications installées"},{"name":"Microsoft Edge","version":"148.0.3967.96","publisher":"Microsoft Corporation","installDate":"20260527","sizeKb":195009,"source":"Applications installées"},{"name":"Microsoft Edge WebView2 Runtime","version":"148.0.3967.96","publisher":"Microsoft Corporation","installDate":"20260530","sizeKb":null,"source":"Applications installées"},{"name":"Microsoft Expression Web 4","version":"4.0.1460.0","publisher":"Microsoft Corporation","installDate":"20260207","sizeKb":274666,"source":"Applications installées"},{"name":"Microsoft FrontPage 2002","version":"10.0.2627.5","publisher":"Microsoft Corporation","installDate":"20210203","sizeKb":340119,"source":"Applications installées"},{"name":"Microsoft Keyboard Layout Creator 1.4","version":"1.0.0","publisher":"Microsoft Corporation","installDate":"20260216","sizeKb":26316,"source":"Applications installées"},{"name":"Microsoft Office Professional Plus 2021 - en-us","version":"16.0.19929.20172","publisher":"Microsoft Corporation","installDate":null,"sizeKb":null,"source":"Applications installées"},{"name":"Microsoft Office Professional Plus 2021 - fr-fr","version":"16.0.19929.20172","publisher":"Microsoft Corporation","installDate":null,"sizeKb":null,"source":"Applications installées"},{"name":"Microsoft SQL Server 2005 Compact Edition [ENU]","version":"3.1.0000","publisher":"Microsoft Corporation","installDate":"20210203","sizeKb":1740,"source":"Applications installées"},{"name":"Microsoft SQL Server Compact 4.0 SP1 x64 ENU","version":"4.0.8876.1","publisher":"Microsoft Corporation","installDate":"20210203","sizeKb":20316,"source":"Applications installées"},{"name":"Microsoft Teams Meeting Add-in for Microsoft Office","version":"1.25.28902","publisher":"Microsoft","installDate":"20260420","sizeKb":34640,"source":"Applications installées"},{"name":"Microsoft Update Health Tools","version":"5.72.0.0","publisher":"Microsoft Corporation","installDate":"20240921","sizeKb":1045,"source":"Applications installées"},{"name":"Microsoft Visual C++ 2005 Redistributable","version":"8.0.56336","publisher":"Microsoft Corporation","installDate":"20210829","sizeKb":4504,"source":"Applications installées"},{"name":"Microsoft Visual C++ 2005 Redistributable (x64)","version":"8.0.61000","publisher":"Microsoft Corporation","installDate":"20210401","sizeKb":7000,"source":"Applications installées"},{"name":"Microsoft Visual C++ 2008 Redistributable - x64 9.0.30729.4148","version":"9.0.30729.4148","publisher":"Microsoft Corporation","installDate":"20230102","sizeKb":11798,"source":"Applications installées"},{"name":"Microsoft Visual C++ 2008 Redistributable - x64 9.0.30729.6161","version":"9.0.30729.6161","publisher":"Microsoft Corporation","installDate":"20230102","sizeKb":13532,"source":"Applications installées"},{"name":"Microsoft Visual C++ 2008 Redistributable - x86 9.0.30729.17","version":"9.0.30729","publisher":"Microsoft Corporation","installDate":"20210829","sizeKb":10520,"source":"Applications installées"},{"name":"Microsoft Visual C++ 2008 Redistributable - x86 9.0.30729.6161","version":"9.0.30729.6161","publisher":"Microsoft Corporation","installDate":"20210830","sizeKb":10440,"source":"Applications installées"},{"name":"Microsoft Visual C++ 2010  x64 Redistributable - 10.0.40219","version":"10.0.40219","publisher":"Microsoft Corporation","installDate":"20210204","sizeKb":14199,"source":"Applications installées"},{"name":"Microsoft Visual C++ 2010  x86 Redistributable - 10.0.40219","version":"10.0.40219","publisher":"Microsoft Corporation","installDate":"20210204","sizeKb":11417,"source":"Applications installées"},{"name":"Microsoft Visual C++ 2012 Redistributable (x64) - 11.0.61030","version":"11.0.61030.0","publisher":"Microsoft Corporation","installDate":null,"sizeKb":21014,"source":"Applications installées"},{"name":"Microsoft Visual C++ 2012 Redistributable (x86) - 11.0.61030","version":"11.0.61030.0","publisher":"Корпорация Майкрософт","installDate":null,"sizeKb":17800,"source":"Applications installées"},{"name":"Microsoft Visual C++ 2012 x64 Additional Runtime - 11.0.61030","version":"11.0.61030","publisher":"Microsoft Corporation","installDate":"20210204","sizeKb":12272,"source":"Applications installées"},{"name":"Microsoft Visual C++ 2012 x64 Minimum Runtime - 11.0.61030","version":"11.0.61030","publisher":"Microsoft Corporation","installDate":"20210204","sizeKb":3820,"source":"Applications installées"},{"name":"Microsoft Visual C++ 2012 x86 Additional Runtime - 11.0.61030","version":"11.0.61030","publisher":"Microsoft Corporation","installDate":"20210204","sizeKb":9900,"source":"Applications installées"},{"name":"Microsoft Visual C++ 2012 x86 Minimum Runtime - 11.0.61030","version":"11.0.61030","publisher":"Microsoft Corporation","installDate":"20210204","sizeKb":1772,"source":"Applications installées"},{"name":"Microsoft Visual C++ 2013 Redistributable (x64) - 12.0.40664","version":"12.0.40664.0","publisher":"Microsoft Corporation","installDate":null,"sizeKb":21062,"source":"Applications installées"},{"name":"Microsoft Visual C++ 2013 Redistributable (x86) - 12.0.30501","version":"12.0.30501.0","publisher":"Microsoft Corporation","installDate":null,"sizeKb":null,"source":"Applications installées"},{"name":"Microsoft Visual C++ 2013 Redistributable (x86) - 12.0.40664","version":"12.0.40664.0","publisher":"Microsoft Corporation","installDate":null,"sizeKb":17602,"source":"Applications installées"},{"name":"Microsoft Visual C++ 2013 x64 Additional Runtime - 12.0.40664","version":"12.0.40664","publisher":"Microsoft Corporation","installDate":"20210302","sizeKb":11784,"source":"Applications installées"},{"name":"Microsoft Visual C++ 2013 x64 Minimum Runtime - 12.0.40664","version":"12.0.40664","publisher":"Microsoft Corporation","installDate":"20210302","sizeKb":2524,"source":"Applications installées"},{"name":"Microsoft Visual C++ 2013 x86 Additional Runtime - 12.0.40664","version":"12.0.40664","publisher":"Microsoft Corporation","installDate":"20210302","sizeKb":9456,"source":"Applications installées"},{"name":"Microsoft Visual C++ 2013 x86 Minimum Runtime - 12.0.40664","version":"12.0.40664","publisher":"Microsoft Corporation","installDate":"20210302","sizeKb":2076,"source":"Applications installées"},{"name":"Microsoft Visual C++ 2015-2022 Redistributable (x64) - 14.44.35211","version":"14.44.35211.0","publisher":"Microsoft Corporation","installDate":null,"sizeKb":21235,"source":"Applications installées"},{"name":"Microsoft Visual C++ 2015-2022 Redistributable (x86) - 14.44.35211","version":"14.44.35211.0","publisher":"Microsoft Corporation","installDate":null,"sizeKb":18673,"source":"Applications installées"},{"name":"Microsoft Visual C++ 2022 X64 Additional Runtime - 14.44.35211","version":"14.44.35211","publisher":"Microsoft Corporation","installDate":"20260203","sizeKb":11892,"source":"Applications installées"},{"name":"Microsoft Visual C++ 2022 X64 Minimum Runtime - 14.44.35211","version":"14.44.35211","publisher":"Microsoft Corporation","installDate":"20260203","sizeKb":2312,"source":"Applications installées"},{"name":"Microsoft Visual C++ 2022 X86 Additional Runtime - 14.44.35211","version":"14.44.35211","publisher":"Microsoft Corporation","installDate":"20260203","sizeKb":10352,"source":"Applications installées"},{"name":"Microsoft Visual C++ 2022 X86 Minimum Runtime - 14.44.35211","version":"14.44.35211","publisher":"Microsoft Corporation","installDate":"20260203","sizeKb":1940,"source":"Applications installées"},{"name":"Microsoft Windows Desktop Runtime - 8.0.27 (x64)","version":"8.0.27.36030","publisher":"Microsoft Corporation","installDate":null,"sizeKb":221747,"source":"Applications installées"},{"name":"Movie Maker","version":"16.4.3528.0331","publisher":"Microsoft Corporation","installDate":"20210203","sizeKb":15480,"source":"Applications installées"},{"name":"Mozilla Firefox (x64 fr)","version":"151.0.2","publisher":"Mozilla","installDate":null,"sizeKb":341378,"source":"Applications installées"},{"name":"Mozilla Maintenance Service","version":"139.0.4","publisher":"Mozilla","installDate":null,"sizeKb":717,"source":"Applications installées"},{"name":"Mozilla Thunderbird ESR (x86 fr)","version":"140.11.1","publisher":"Mozilla","installDate":null,"sizeKb":286456,"source":"Applications installées"},{"name":"MSVCRT","version":"15.4.2862.0708","publisher":"Microsoft","installDate":"20210203","sizeKb":1492,"source":"Applications installées"},{"name":"MSVCRT110","version":"16.4.1108.0727","publisher":"Microsoft","installDate":"20210203","sizeKb":1864,"source":"Applications installées"},{"name":"MSVCRT110_amd64","version":"16.4.1109.0912","publisher":"Microsoft","installDate":"20210203","sizeKb":2112,"source":"Applications installées"},{"name":"NetDTL version 1.0.0","version":"1.0.0","publisher":"Didier Morandi","installDate":"20260523","sizeKb":4374,"source":"Applications installées"},{"name":"Nmap 7.99","version":"7.99","publisher":"Nmap Project","installDate":null,"sizeKb":null,"source":"Applications installées"},{"name":"Notepad++ (64-bit x64)","version":"8.7.1","publisher":"Notepad++ Team","installDate":null,"sizeKb":19535,"source":"Applications installées"},{"name":"Npcap","version":"1.87","publisher":"Nmap Project","installDate":null,"sizeKb":null,"source":"Applications installées"},{"name":"NvCpl","version":"1.0","publisher":"NVIDIA Corporation","installDate":"20250621","sizeKb":null,"source":"Applications installées"},{"name":"NVIDIA AIUser Container","version":"1.42","publisher":"NVIDIA Corporation","installDate":"20250621","sizeKb":null,"source":"Applications installées"},{"name":"NVIDIA App 11.0.4.159","version":"11.0.4.159","publisher":"NVIDIA Corporation","installDate":"20250621","sizeKb":null,"source":"Applications installées"},{"name":"NVIDIA Backend","version":"11.0.4.159","publisher":"NVIDIA Corporation","installDate":"20250621","sizeKb":null,"source":"Applications installées"},{"name":"NVIDIA Container","version":"1.42","publisher":"NVIDIA Corporation","installDate":"20250621","sizeKb":null,"source":"Applications installées"},{"name":"NVIDIA FrameView SDK 1.5.10920.35420203","version":"1.5.10920.35420203","publisher":"NVIDIA Corporation","installDate":"20250621","sizeKb":null,"source":"Applications installées"},{"name":"NVIDIA Install Application","version":"2.1002.428.0","publisher":"NVIDIA Corporation","installDate":"20250621","sizeKb":null,"source":"Applications installées"},{"name":"NVIDIA LocalSystem Container","version":"1.42","publisher":"NVIDIA Corporation","installDate":"20250621","sizeKb":null,"source":"Applications installées"},{"name":"NVIDIA Logiciel système PhysX 9.23.1019","version":"9.23.1019","publisher":"NVIDIA Corporation","installDate":"20250311","sizeKb":null,"source":"Applications installées"},{"name":"NVIDIA MessageBus 3 for NvApp","version":"3.15","publisher":"NVIDIA Corporation","installDate":"20250621","sizeKb":null,"source":"Applications installées"},{"name":"NVIDIA NvDLISR","version":"1.0","publisher":"NVIDIA Corporation","installDate":"20250621","sizeKb":null,"source":"Applications installées"},{"name":"NVIDIA Pilote audio HD 1.4.3.2","version":"1.4.3.2","publisher":"NVIDIA Corporation","installDate":"20250311","sizeKb":null,"source":"Applications installées"},{"name":"NVIDIA Pilote graphique 572.70","version":"572.70","publisher":"NVIDIA Corporation","installDate":"20250607","sizeKb":null,"source":"Applications installées"},{"name":"NVIDIA Session Container","version":"1.42","publisher":"NVIDIA Corporation","installDate":"20250621","sizeKb":null,"source":"Applications installées"},{"name":"NVIDIA ShadowPlay 11.0.4.0","version":"11.0.4.0","publisher":"NVIDIA Corporation","installDate":"20250621","sizeKb":null,"source":"Applications installées"},{"name":"NVIDIA Telemetry Client","version":"19.4.23.0","publisher":"NVIDIA Corporation","installDate":"20250621","sizeKb":null,"source":"Applications installées"},{"name":"NVIDIA User Container","version":"1.42","publisher":"NVIDIA Corporation","installDate":"20250621","sizeKb":null,"source":"Applications installées"},{"name":"NVIDIA Virtual Audio 4.65.0.3","version":"4.65.0.3","publisher":"NVIDIA Corporation","installDate":"20250621","sizeKb":null,"source":"Applications installées"},{"name":"NVIDIA Watchdog Plugin for NvContainer","version":"1.42","publisher":"NVIDIA Corporation","installDate":"20250621","sizeKb":null,"source":"Applications installées"},{"name":"Office 16 Click-to-Run Extensibility Component","version":"16.0.19929.20172","publisher":"Microsoft Corporation","installDate":"20260517","sizeKb":34912,"source":"Applications installées"},{"name":"Office 16 Click-to-Run Licensing Component","version":"16.0.18730.20168","publisher":"Microsoft Corporation","installDate":"20250520","sizeKb":3948,"source":"Applications installées"},{"name":"Office 16 Click-to-Run Localization Component","version":"16.0.19929.20062","publisher":"Microsoft Corporation","installDate":"20260423","sizeKb":1080,"source":"Applications installées"},{"name":"Open-Shell","version":"4.4.196","publisher":"The Open-Shell Team","installDate":"20250717","sizeKb":13100,"source":"Applications installées"},{"name":"Paramètres","version":null,"publisher":"Microsoft / Windows","installDate":null,"sizeKb":null,"source":"Menu Démarrer"},{"name":"PatchCleaner","version":"1.4.20","publisher":"HomeDev","installDate":"20251202","sizeKb":2228,"source":"Applications installées"},{"name":"PC Tools Registry Mechanic 11.1","version":"11.1","publisher":"PC Tools","installDate":"20210322105438","sizeKb":34806,"source":"Applications installées"},{"name":"Photo Common","version":"16.4.3528.0331","publisher":"Microsoft Corporation","installDate":"20210203","sizeKb":1092,"source":"Applications installées"},{"name":"Photo Gallery","version":"16.4.3528.0331","publisher":"Microsoft Corporation","installDate":"20210203","sizeKb":33792,"source":"Applications installées"},{"name":"PredatorSense Service","version":"3.00.3010","publisher":"Acer Incorporated","installDate":"20210203","sizeKb":22498,"source":"Applications installées"},{"name":"Prise en main","version":null,"publisher":"Microsoft / Windows","installDate":null,"sizeKb":null,"source":"Menu Démarrer"},{"name":"Realtek High Definition Audio Driver","version":"6.0.1.8186","publisher":"Realtek Semiconductor Corp.","installDate":"20210203","sizeKb":615023,"source":"Applications installées"},{"name":"Sauvegarde Windows","version":null,"publisher":"Microsoft / Windows","installDate":null,"sizeKb":null,"source":"Menu Démarrer"},{"name":"SharePoint Client Components","version":"15.0.4711.1001","publisher":"Microsoft Corporation","installDate":"20240910","sizeKb":13213,"source":"Applications installées"},{"name":"Shotcut","version":"26.2.26","publisher":"Meltytech","installDate":"20260320","sizeKb":502270,"source":"Applications installées"},{"name":"TreeSize Free V4.8.1","version":"4.8.1","publisher":"JAM Software","installDate":"20260422","sizeKb":81997,"source":"Applications installées"},{"name":"Update for Windows 10 for x64-based Systems (KB4480730)","version":"2.55.0.0","publisher":"Microsoft Corporation","installDate":"20210203","sizeKb":818,"source":"Applications installées"},{"name":"Update for Windows 10 for x64-based Systems (KB5001716)","version":"8.94.0.0","publisher":"Microsoft Corporation","installDate":"20240515","sizeKb":836,"source":"Applications installées"},{"name":"UpdateAssistant","version":"1.25.0.0","publisher":"Microsoft Corporation","installDate":"20210204","sizeKb":6141,"source":"Applications installées"},{"name":"VLC media player","version":"3.0.23","publisher":"VideoLAN","installDate":null,"sizeKb":null,"source":"Applications installées"},{"name":"Windows Live","version":"16.4.3528.0331","publisher":"Microsoft Corporation","installDate":"20210203","sizeKb":236,"source":"Applications installées"},{"name":"Windows Live Communications Platform","version":"16.4.3528.0331","publisher":"Microsoft Corporation","installDate":"20210203","sizeKb":3688,"source":"Applications installées"},{"name":"Windows Live Installer","version":"16.4.3528.0331","publisher":"Microsoft Corporation","installDate":"20210203","sizeKb":8220,"source":"Applications installées"},{"name":"Windows Live Photo Common","version":"16.4.3528.0331","publisher":"Microsoft Corporation","installDate":"20210203","sizeKb":5112,"source":"Applications installées"},{"name":"Windows Live PIMT Platform","version":"16.4.3528.0331","publisher":"Microsoft Corporation","installDate":"20210203","sizeKb":2204,"source":"Applications installées"},{"name":"Windows Live SOXE","version":"16.4.3528.0331","publisher":"Microsoft Corporation","installDate":"20210203","sizeKb":172,"source":"Applications installées"},{"name":"Windows Live SOXE Definitions","version":"16.4.3528.0331","publisher":"Microsoft Corporation","installDate":"20210203","sizeKb":104,"source":"Applications installées"},{"name":"Windows Live UX Platform","version":"16.4.3528.0331","publisher":"Microsoft Corporation","installDate":"20210203","sizeKb":9188,"source":"Applications installées"},{"name":"Windows Live UX Platform Language Pack","version":"16.4.3528.0331","publisher":"Microsoft Corporation","installDate":"20210203","sizeKb":52,"source":"Applications installées"},{"name":"Windows Subsystem for Linux","version":"2.3.26.0","publisher":"Microsoft Corporation","installDate":"20250118","sizeKb":665376,"source":"Applications installées"},{"name":"XAMPP","version":"8.2.12-0","publisher":"Apache Friends","installDate":"20260523","sizeKb":791878,"source":"Applications installées"}]</script>
+  <script>
+    const apps = JSON.parse(document.querySelector('#app-data').textContent);
+    const categoryLabels = {
+      logiciel: 'Logiciels et usages quotidiens',
+      media: 'Création, image, audio et vidéo',
+      dev: 'Développement, web et réseau',
+      systeme: 'Composants système et runtimes',
+      pilote: 'Pilotes, matériel et périphériques'
+    };
+    const categoryOrder = ['logiciel', 'media', 'dev', 'systeme', 'pilote'];
+    const catalogue = document.querySelector('#catalogue');
+    const search = document.querySelector('#search');
+    const buttons = [...document.querySelectorAll('[data-filter]')];
+    const count = document.querySelector('#count');
+    const totalSize = document.querySelector('#totalSize');
+    const empty = document.querySelector('#empty');
+    let currentFilter = 'all';
+
+    function cleanName(name) {
+      return name.replace(/\s*\([^)]*\b(x64|x86|64-bit|32-bit|fr|en-us|fr-fr)[^)]*\)/gi, '').replace(/\s+version\s+/i, ' ').trim();
+    }
+
+    function category(app) {
+      const n = app.name.toLowerCase();
+      const p = (app.publisher || '').toLowerCase();
+      if (/nvidia|realtek|epson|logi|logitech|predatorsense|driver|pilote|npcap|printer|imprimante|scan|audio hd/.test(n + ' ' + p)) return `pilote`;
+      if (/visual c\+\+|\.net|runtime|redistributable|msvcrt|webview|update|health tools|d3dx|sql server compact|click-to-run|licensing|localization|component|common|platform|soxe|installer|maintenance service|refresh manager|application error reporting/.test(n)) return `systeme`;
+      if (/git|xampp|filezilla|nmap|imagemagick|inno setup|frontpage|expression web|keyboard layout creator|wsl|subsystem|indexlinker|netdtl/.test(n)) return `dev`;
+      if (/vlc|gimp|shotcut|movie maker|photo|photos|gallery|galerie|acrobat|avs|video|audio|image|disc|document converter|4k video|capture/.test(n)) return `media`;
+      return `logiciel`;
+    }
+
+    function description(app) {
+      const n = app.name.toLowerCase();
+      if (n.includes('4k video downloader')) return `Téléchargeur de vidéos destiné à récupérer des contenus en ligne dans différents formats.`;
+      if (n.includes('7-zip')) return `Outil de compression et décompression pour archives ZIP, 7z et nombreux autres formats.`;
+      if (n.includes('acrobat')) return `Application Adobe pour lire, imprimer et manipuler des documents PDF.`;
+      if (n.includes('avast')) return `Composant lié aux mises à jour ou à la maintenance de la solution de sécurité Avast.`;
+      if (n.includes('avs audio converter')) return `Convertisseur audio pour changer le format de fichiers sonores.`;
+      if (n.includes('avs audio editor')) return `Éditeur audio pour couper, nettoyer et modifier des enregistrements sonores.`;
+      if (n.includes('avs disc creator')) return `Outil AVS pour créer ou graver des disques à partir de fichiers multimédias.`;
+      if (n.includes('avs document converter')) return `Convertisseur de documents pour transformer des fichiers bureautiques en autres formats.`;
+      if (n.includes('avs image converter')) return `Convertisseur d'images pour changer format, taille ou paramètres de photos.`;
+      if (n.includes('avs media player')) return `Lecteur multimédia AVS pour lire vidéos, musiques et autres fichiers médias.`;
+      if (n.includes('avs photo editor')) return `Éditeur photo simple pour corriger et améliorer des images.`;
+      if (n.includes('registry cleaner') || n.includes('patchcleaner')) return `Utilitaire de nettoyage qui vise à repérer des éléments système ou installateurs inutilisés.`;
+      if (n.includes('avs video converter')) return `Convertisseur vidéo pour adapter les fichiers à différents appareils ou formats.`;
+      if (n.includes('avs video remaker')) return `Outil de montage léger pour couper et réorganiser des vidéos sans repartir de zéro.`;
+      if (n.includes('contrôle d’intégrité') || n.includes('controle d')) return `Outil Microsoft qui vérifie l'état du PC et sa compatibilité avec Windows.`;
+      if (n.includes('copilot')) return `Assistant Microsoft intégré pour poser des questions, résumer et aider aux tâches courantes.`;
+      if (n.includes('d3dx')) return `Ancien composant DirectX requis par certains jeux ou logiciels graphiques.`;
+      if (n.includes('epson')) return `Composant Epson lié à l'imprimante, au scanner ou aux mises à jour du périphérique.`;
+      if (n.includes('everything')) return `Moteur de recherche local très rapide pour retrouver instantanément fichiers et dossiers.`;
+      if (n.includes('filezilla')) return `Client FTP/SFTP pour transférer des fichiers vers des serveurs distants.`;
+      if (n.includes('gimp')) return `Éditeur d'images avancé pour retouche photo, dessin et composition graphique.`;
+      if (n === 'git' || n.startsWith('git ')) return `Outil de gestion de versions utilisé pour suivre et synchroniser des projets de code.`;
+      if (n.includes('chrome')) return `Navigateur web Google pour consulter des sites et utiliser des applications en ligne.`;
+      if (n.includes('grand theft auto')) return `Jeu vidéo installé sur le PC.`;
+      if (n.includes('icaros')) return `Extension qui améliore les miniatures et métadonnées de fichiers multimédias dans Windows.`;
+      if (n.includes('icloud')) return `Composant Apple pour synchroniser certaines données iCloud avec Outlook.`;
+      if (n.includes('imagemagick')) return `Suite d'outils pour convertir, redimensionner et traiter des images par lots.`;
+      if (n.includes('inno setup')) return `Outil de création d'installateurs Windows pour distribuer des applications.`;
+      if (n.includes('logi') || n.includes('logitech')) return `Logiciel Logitech pour régler souris, clavier, webcam ou services associés.`;
+      if (n.includes('.net')) return `Composant Microsoft nécessaire au fonctionnement d'applications construites avec .NET.`;
+      if (n.includes('edge webview2')) return `Moteur web Microsoft utilisé par de nombreuses applications Windows pour afficher du contenu web.`;
+      if (n === 'microsoft edge') return `Navigateur Microsoft installé sur Windows pour le web, les PDF et les applications web.`;
+      if (n.includes('expression web') || n.includes('frontpage')) return `Ancien outil Microsoft de création et édition de sites web.`;
+      if (n.includes('keyboard layout creator')) return `Outil Microsoft pour créer ou modifier des dispositions de clavier personnalisées.`;
+      if (n.includes('office professional')) return `Suite bureautique Microsoft Office comprenant les applications de productivité associées.`;
+      if (n.includes('sql server compact')) return `Base de données locale légère utilisée par certains anciens logiciels Windows.`;
+      if (n.includes('teams meeting')) return `Module complémentaire qui permet de créer des réunions Teams depuis Microsoft Office.`;
+      if (n.includes('visual c++') || n.includes('msvcrt')) return `Bibliothèque Microsoft requise par de nombreux logiciels Windows écrits en C ou C++.`;
+      if (n.includes('movie maker')) return `Ancien éditeur vidéo Microsoft pour réaliser des montages simples.`;
+      if (n.includes('firefox')) return `Navigateur web Mozilla installé en français.`;
+      if (n.includes('thunderbird')) return `Client de messagerie Mozilla pour gérer courriels, comptes et archives.`;
+      if (n.includes('nmap')) return `Outil réseau pour analyser ports, hôtes et services disponibles.`;
+      if (n.includes('notepad++')) return `Éditeur de texte avancé pratique pour code, scripts et fichiers de configuration.`;
+      if (n.includes('nvidia app')) return `Application NVIDIA de gestion des pilotes, réglages graphiques, captures et optimisations.`;
+      if (n.includes('nvidia')) return `Composant NVIDIA lié au pilote graphique, à l'audio HDMI ou aux services de la carte vidéo.`;
+      if (n.includes('open-shell')) return `Personnalisation du menu Démarrer et de certains comportements classiques de Windows.`;
+      if (n.includes('photo gallery') || n.includes('galerie de photos')) return `Ancienne application Microsoft pour organiser et consulter des photos.`;
+      if (n.includes('realtek')) return `Pilote audio Realtek nécessaire au fonctionnement du son intégré du PC.`;
+      if (n.includes('sharepoint')) return `Composants Microsoft utilisés par certaines fonctions Office et SharePoint.`;
+      if (n.includes('shotcut')) return `Éditeur vidéo libre pour montage, transitions, effets et export de vidéos.`;
+      if (n.includes('treesize')) return `Analyseur d'espace disque qui montre quels dossiers occupent le plus de place.`;
+      if (n.includes('update')) return `Composant de mise à jour Microsoft ou Windows installé pour maintenir le système.`;
+      if (n.includes('vlc')) return `Lecteur multimédia polyvalent capable de lire de très nombreux formats audio et vidéo.`;
+      if (n.includes('windows live')) return `Composant de l'ancienne suite Windows Live encore présent pour compatibilité.`;
+      if (n.includes('subsystem for linux')) return `Fonction Windows permettant d'exécuter des environnements Linux sur le PC.`;
+      if (n.includes('xampp')) return `Ensemble serveur local avec Apache, PHP et outils associés pour le développement web.`;
+      if (app.source === 'Menu Démarrer') return `Application visible dans le menu Démarrer de cette session Windows.`;
+      if (category(app) === 'pilote') return `Composant lié au matériel, au pilote ou à la gestion d'un périphérique.`;
+      if (category(app) === 'systeme') return `Composant technique utilisé par Windows ou par d'autres logiciels installés.`;
+      if (category(app) === 'dev') return `Outil orienté développement, réseau, web ou automatisation.`;
+      if (category(app) === 'media') return `Application orientée création, lecture ou conversion de contenus multimédias.`;
+      return `Application installée sur ce PC, détectée dans la liste locale de Windows.`;
+    }
+
+    function formatSize(kb) {
+      if (!kb || kb < 1) return `taille non renseignée`;
+      const gb = kb / 1024 / 1024;
+      if (gb >= 1) return gb.toLocaleString('fr-FR', { maximumFractionDigits: 2 }) + ' Go';
+      const mb = kb / 1024;
+      return mb.toLocaleString('fr-FR', { maximumFractionDigits: 1 }) + ' Mo';
+    }
+
+    function formatDate(value) {
+      if (!value) return `date non renseignée`;
+      const m = String(value).match(/^(\d{4})(\d{2})(\d{2})/);
+      if (!m) return value;
+      return `${m[3]}/${m[2]}/${m[1]}`;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '').replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
+    }
+
+    const enriched = apps.map(app => ({ ...app, category: category(app), description: description(app) }));
+
+    function cardTemplate(app) {
+      const tagClass = app.category === 'media' ? 'media' : app.category === 'pilote' ? 'driver' : app.category === 'systeme' ? 'system' : 'software';
+      return `
+        <article class="card" data-category="${app.category}" data-size="${app.sizeKb || 0}" data-search="${escapeHtml((app.name + ' ' + (app.publisher || '') + ' ' + (app.version || '') + ' ' + app.description).toLowerCase())}">
+          <div>
+            <h3>${escapeHtml(cleanName(app.name))}</h3>
+            <p>${escapeHtml(app.description)}</p>
+            <div class="details">
+              <span>Éditeur: ${escapeHtml(app.publisher || 'non renseigné')}</span>
+              <span>Version: ${escapeHtml(app.version || 'non renseignée')}</span>
+              <span>Installation: ${escapeHtml(formatDate(app.installDate))}</span>
+              <span>Taille: ${escapeHtml(formatSize(app.sizeKb))}</span>
+            </div>
+          </div>
+          <div class="meta"><span class="tag ${tagClass}">${escapeHtml(categoryLabels[app.category].split(',')[0])}</span><span class="tag">${escapeHtml(app.source)}</span></div>
+        </article>`;
+    }
+
+    function render() {
+      catalogue.innerHTML = categoryOrder.map(key => {
+        const group = enriched.filter(app => app.category === key);
+        if (!group.length) return ``;
+        return `<section class="section" data-section="${key}"><h2>${categoryLabels[key]}</h2><div class="grid">${group.map(cardTemplate).join('')}</div></section>`;
+      }).join('');
+      applyFilters();
+    }
+
+    function applyFilters() {
+      const query = search.value.trim().toLowerCase();
+      let visibleCards = 0;
+      let sizeKb = 0;
+      document.querySelectorAll('.card').forEach(card => {
+        const visible = (currentFilter === 'all' || card.dataset.category === currentFilter) && (!query || card.dataset.search.includes(query));
+        card.hidden = !visible;
+        if (visible) {
+          visibleCards += 1;
+          sizeKb += Number(card.dataset.size || 0);
+        }
+      });
+      document.querySelectorAll('.section').forEach(section => {
+        section.hidden = ![...section.querySelectorAll('.card')].some(card => !card.hidden);
+      });
+      empty.style.display = visibleCards ? 'none' : 'block';
+      count.textContent = visibleCards;
+      totalSize.textContent = formatSize(sizeKb);
+    }
+
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        buttons.forEach(item => item.classList.remove('active'));
+        button.classList.add('active');
+        currentFilter = button.dataset.filter;
+        applyFilters();
+      });
+    });
+    search.addEventListener('input', applyFilters);
+    render();
+  </script>
+</body>
+</html>
